@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const nav = [
   { href: "/", label: "Home" },
@@ -11,8 +11,26 @@ const nav = [
   { href: "/#news", label: "Blog" },
 ] as const;
 
+function useCartCount() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const load = () =>
+      fetch("/api/cart/count")
+        .then((res) => res.json())
+        .then((data: { count: number }) => setCount(data.count))
+        .catch(() => {});
+    load();
+    window.addEventListener("cart:updated", load);
+    return () => window.removeEventListener("cart:updated", load);
+  }, []);
+
+  return count;
+}
+
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const cartCount = useCartCount();
 
   return (
     <header className="relative z-40 bg-cream">
@@ -47,9 +65,14 @@ export function SiteHeader() {
           <Link
             href="/cart"
             aria-label="Warenkorb"
-            className="flex size-11 items-center justify-center border-[1.5px] border-bark transition-colors hover:border-gold lg:size-12"
+            className="relative flex size-11 items-center justify-center border-[1.5px] border-bark transition-colors hover:border-gold lg:size-12"
           >
             <Image src="/landing/icon-cart.svg" alt="" width={26} height={26} />
+            {cartCount > 0 && (
+              <span className="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-gold font-body text-[11px] text-parchment">
+                {cartCount}
+              </span>
+            )}
           </Link>
           <button
             type="button"

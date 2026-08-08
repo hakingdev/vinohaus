@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { AddToCart } from "@/components/cart/AddToCart";
 import { CHANNEL, saleorFetch } from "@/lib/saleor/client";
 import { ProductDetailsQuery, type ProductDetailsResult } from "@/lib/saleor/queries";
 import { formatPrice } from "@/lib/utils";
@@ -77,34 +78,18 @@ export default async function ProductPage({
         )}
         {/* TODO: Grundpreis (€/l) anzeigen, sobald das Flaschenvolumen als Attribut gepflegt ist */}
 
-        {product.variants && product.variants.length > 0 && (
-          <ul className="mt-6 space-y-2">
-            {product.variants.map((variant) => (
-              <li
-                key={variant.id}
-                className="flex items-center justify-between rounded-lg border border-neutral-200 px-4 py-2 text-sm"
-              >
-                <span>{variant.name}</span>
-                <span className="text-neutral-500">
-                  {variant.pricing?.price
-                    ? formatPrice(
-                        variant.pricing.price.gross.amount,
-                        variant.pricing.price.gross.currency
-                      )
-                    : "—"}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {/* TODO: checkoutCreate / checkoutLinesAdd anbinden */}
-        <button
-          className="mt-6 w-full cursor-not-allowed rounded-lg bg-neutral-300 px-6 py-3 text-sm font-medium text-neutral-600"
-          disabled
-        >
-          In den Warenkorb (Checkout folgt)
-        </button>
+        <AddToCart
+          variants={(product.variants ?? []).map((variant) => ({
+            id: variant.id,
+            name: variant.name,
+            price: variant.pricing?.price
+              ? formatPrice(
+                  variant.pricing.price.gross.amount,
+                  variant.pricing.price.gross.currency
+                )
+              : null,
+          }))}
+        />
 
         <DescriptionBlocks raw={product.description} />
       </div>
