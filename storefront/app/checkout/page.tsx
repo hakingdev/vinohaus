@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { AddressForm } from "@/components/cart/AddressForm";
 import { DeliveryMethodPicker } from "@/components/cart/DeliveryMethodPicker";
+import { PayPalPayment } from "@/components/cart/PayPalPayment";
 import { getCheckout } from "@/lib/cart/data";
 import { formatPrice } from "@/lib/utils";
 
@@ -76,10 +77,22 @@ export default async function CheckoutPage() {
 
           <section>
             <StepHeading n={3}>Zahlung</StepHeading>
-            <p className="mt-5 font-body text-[15px] italic text-latte">
-              {/* TODO: Payment-App (Stripe) anbinden, dann checkoutComplete */}
-              Die Zahlungsanbindung folgt als nächster Schritt.
-            </p>
+            <div className="mt-5">
+              {!checkout.deliveryMethod ? (
+                <p className="font-body text-[15px] italic text-latte">
+                  Bitte zuerst eine Versandart wählen.
+                </p>
+              ) : process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ? (
+                <PayPalPayment
+                  clientId={process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}
+                  currency={total.currency}
+                />
+              ) : (
+                <div className="rounded-lg border border-amber-300 bg-amber-50 p-4 font-body text-sm text-amber-900">
+                  PayPal wird gerade konfiguriert — die Bezahlung ist in Kürze verfügbar.
+                </div>
+              )}
+            </div>
           </section>
         </div>
 
@@ -118,14 +131,9 @@ export default async function CheckoutPage() {
               <dd>{formatPrice(total.amount, total.currency)}</dd>
             </div>
           </dl>
-          <button
-            disabled
-            className="mt-6 w-full cursor-not-allowed rounded-[6px] bg-sand px-6 py-4 font-body text-lg text-bark opacity-70"
-          >
-            Kostenpflichtig bestellen
-          </button>
-          <p className="mt-3 text-center font-body text-xs italic text-latte">
-            aktiv nach Anbindung der Zahlung
+          <p className="mt-6 rounded-lg bg-parchment p-4 text-center font-body text-sm text-latte">
+            Die Bezahlung erfolgt sicher über <strong className="text-cocoa">PayPal</strong> in
+            Schritt 3.
           </p>
           <Link
             href="/cart"

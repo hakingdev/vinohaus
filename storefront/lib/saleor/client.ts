@@ -10,11 +10,14 @@ export async function saleorFetch<TData>({
   variables,
   tags,
   revalidate,
+  token,
 }: {
   query: string;
   variables?: Record<string, unknown>;
   tags?: string[];
   revalidate?: number;
+  /** App token for privileged mutations — server-side only. */
+  token?: string;
 }): Promise<TData> {
   const apiUrl = process.env.NEXT_PUBLIC_SALEOR_API_URL;
   if (!apiUrl) {
@@ -25,7 +28,10 @@ export async function saleorFetch<TData>({
 
   const res = await fetch(apiUrl, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
     body: JSON.stringify({ query, variables }),
     next: { tags, revalidate },
   });
