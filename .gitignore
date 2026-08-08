@@ -12,8 +12,8 @@ Desktop.ini
 *.log
 tmp/
 
-# --- Claude Code: локальные настройки машины (общие настройки коммитим) ---
-.claude/settings.local.json
+# --- Claude Code: вся папка локальная, в репозиторий не идёт ---
+.claude/
 
 # --- env файлы на любом уровне (шаблоны .env.example — коммитим) ---
 .env
