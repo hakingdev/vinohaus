@@ -1,0 +1,26 @@
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- IDE ---
+.idea/
+.vscode/
+*.iml
+
+# --- logs / temp ---
+*.log
+tmp/
+
+# --- Claude Code: локальные настройки машины (общие настройки коммитим) ---
+.claude/settings.local.json
+
+# --- env файлы на любом уровне (шаблоны .env.example — коммитим) ---
+.env
+.env.*
+!.env.example
+
+# --- Go (services/): бинарники и профили ---
+services/**/*.exe
+services/**/*.test
+services/**/*.out

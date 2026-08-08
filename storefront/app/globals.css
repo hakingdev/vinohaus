@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+/* VIN ROUGE design tokens (from Figma) */
+@theme inline {
+  --color-cream: #f5ebda; /* page background */
+  --color-cocoa: #482817; /* primary text */
+  --color-bark: #623d2a; /* nav text, icon strokes */
+  --color-gold: #af6900; /* eyebrows, button borders */
+  --color-honey: #bb6500; /* dates, small accents */
+  --color-latte: #9e845c; /* muted body text */
+  --color-parchment: #faf7f2; /* light section background, button text */
+  --color-sand: #d1b991; /* thin dividers */
+
+  --font-display: var(--font-cinzel);
+  --font-body: var(--font-baskerville);
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-cocoa);
+  font-family: var(--font-baskerville), Georgia, serif;
+}

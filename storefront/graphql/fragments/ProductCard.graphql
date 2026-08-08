@@ -1,0 +1,19 @@
+fragment ProductCard on Product {
+  id
+  name
+  slug
+  thumbnail(size: 512) {
+    url
+    alt
+  }
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+  }
+}

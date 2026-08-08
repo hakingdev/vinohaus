@@ -1,0 +1,13 @@
+query ProductList($channel: String!, $first: Int!, $after: String) {
+  products(channel: $channel, first: $first, after: $after) {
+    edges {
+      node {
+        ...ProductCard
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
